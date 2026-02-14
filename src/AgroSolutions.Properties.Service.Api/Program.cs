@@ -131,6 +131,19 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 #endregion
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Cors", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+#endregion
+
 var app = builder.Build();
 
 #region Middlewares
@@ -139,6 +152,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors("Cors");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
